@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 
 namespace reactive_programming
@@ -22,7 +24,6 @@ namespace reactive_programming
 
             Console.WriteLine("Hello World!");
         }
-
 
         public class MyObservable : IObservable<int>
         {
@@ -75,12 +76,23 @@ namespace reactive_programming
             Console.WriteLine("Hello World!");
         }
 
+        private void Test3()
+        {
+            Subject<string> messenger = new Subject<string>();
+            messenger.Subscribe(msg => { Console.WriteLine($"msg: {msg}"); });
+            messenger.Subscribe(msg => { File.AppendAllText(@"c:\projects\file.txt", $"msg: {msg}" + Environment.NewLine);});
+
+            messenger.OnNext("Message 1");
+            messenger.OnNext("Message 2");
+
+            Console.ReadLine();
+        }
+
         static void Main(string[] args)
         {
             Program p = new Program();
-            p.Test2();
+            p.Test3();
         }
-
 
         private static TimeSpan TimeSelector(int i)
         {
